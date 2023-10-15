@@ -12,6 +12,7 @@ enum MySearchRouter: URLRequestConvertible {
     
     case sendSms(phone: Int)
     case checkSms(phone: Int, code: Int)
+    case login(uid: String, password: String)
 
     var baseURL: URL {
         return URL(string: API.BASE_URL + "members/")! //여기서 나온 값이 baseURL이다.
@@ -24,6 +25,8 @@ enum MySearchRouter: URLRequestConvertible {
             return .get
         case .checkSms:
             return .get
+        case .login:
+            return .post
         }
         
     }
@@ -32,9 +35,10 @@ enum MySearchRouter: URLRequestConvertible {
         switch self {
         case .sendSms:
             return "sms"
-            
         case .checkSms:
             return "sms"
+        case .login:
+            return "login"
         }
     }
     
@@ -44,6 +48,8 @@ enum MySearchRouter: URLRequestConvertible {
             return ["phone" : phone]
         case let .checkSms(phone,code):
             return ["phone": phone, "code": code]
+        case let .login(uid, password):
+            return ["uid": uid, "password": password]
         }
     }
 
@@ -55,7 +61,7 @@ enum MySearchRouter: URLRequestConvertible {
         var request = URLRequest(url: url)
         request.method = method
         
-        if method == .get {
+        
            if let parameters = parameters as? [String: Any] {
                var components = URLComponents(url: url, resolvingAgainstBaseURL: false)
                components?.queryItems = parameters.map { key, value in
@@ -65,7 +71,7 @@ enum MySearchRouter: URLRequestConvertible {
                    request.url = urlWithQuery
                }
            }
-       }
+       
 
         return request
     }

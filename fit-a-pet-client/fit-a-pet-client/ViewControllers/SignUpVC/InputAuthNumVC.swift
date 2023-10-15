@@ -1,9 +1,4 @@
-//
-//  InputAuthNumVC.swift
-//  fit-a-pet-client
-//
-//  Created by 최희진 on 2023/09/06.
-//
+
 
 import UIKit
 import SnapKit
@@ -16,7 +11,6 @@ class InputAuthNumVC : UIViewController{
     let customLabel = ConstomLabel()
     
     var phone: Int = 0
-   
     var code: Int = 0
     
     override func viewDidLoad() {
@@ -25,10 +19,10 @@ class InputAuthNumVC : UIViewController{
         initView()
         
         nextIdBtn.addTarget(self, action: #selector(changeInputIdVC(_:)), for: .touchUpInside)
-        
-        //navigation back 버튼 스타일
     }
     private func initView(){
+        
+        view.backgroundColor = .white
         
         self.view.addSubview(nextIdBtn)
         self.view.addSubview(inputAuthNum)
@@ -103,7 +97,6 @@ class InputAuthNumVC : UIViewController{
     }
     @objc func changeInputIdVC(_ sender: UIButton){
         phone = RegistrationManager.shared.phone!
-       
         
         AlamofireManager.shared.checkSms(phone, code){
             result in
@@ -123,7 +116,7 @@ class InputAuthNumVC : UIViewController{
             }
         }
         
-        guard let nextVC = self.storyboard?.instantiateViewController(identifier: "InputIdVC") else { return }
+        let nextVC = InputIdVC()
 
         self.navigationController?.pushViewController(nextVC, animated: false)
         

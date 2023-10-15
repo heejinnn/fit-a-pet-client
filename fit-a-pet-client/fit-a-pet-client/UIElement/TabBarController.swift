@@ -28,7 +28,7 @@ class TabBarController: UITabBarController {
         
         navigationMain.tabBarItem.image = UIImage.init(systemName: "house")
         
-        navigationMain.navigationBar.isHidden = true
+       // navigationMain.navigationBar.isHidden = true
         
         //각 tab bar의 viewcontroller 타이틀 설정
         navigationMain.title = "홈"
@@ -38,8 +38,5 @@ class TabBarController: UITabBarController {
         navigationSetting.title = "설정"
         
         selectedIndex = 2
-        
-        
     }
-    
 }

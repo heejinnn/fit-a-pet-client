@@ -1,9 +1,3 @@
-//
-//  InputPhoneNumVC.swift
-//  fit-a-pet-client
-//
-//  Created by 최희진 on 2023/09/06.
-//
 
 import UIKit
 import SnapKit
@@ -26,6 +20,8 @@ class InputPhoneNumVC : UIViewController {
         nextAutnNumBtn.addTarget(self, action: #selector(changeInputAuthNumVC(_:)), for: .touchUpInside)
     }
     private func initView(){
+        
+        view.backgroundColor = .white
         
         self.view.addSubview(nextAutnNumBtn)
         self.view.addSubview(inputPhoneNum)
@@ -100,9 +96,8 @@ class InputPhoneNumVC : UIViewController {
     }
     
     @objc func changeInputAuthNumVC(_ sender: UIButton){
-        guard let nextVC = self.storyboard?.instantiateViewController(identifier: "InputAuthNumVC") else { return }
-       
-
+        let nextVC = InputAuthNumVC()
+    
         RegistrationManager.shared.addInput(phone: phone)
 
         AlamofireManager.shared.sendSms(phone){

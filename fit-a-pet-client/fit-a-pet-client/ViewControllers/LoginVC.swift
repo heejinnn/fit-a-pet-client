@@ -16,6 +16,9 @@ class LoginVC: UIViewController, UITextFieldDelegate{
     let inputPw = UITextField()
     let loginBtn = UIButton()
     
+    var uid = ""
+    var password = ""
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -28,6 +31,8 @@ class LoginVC: UIViewController, UITextFieldDelegate{
         self.navigationController?.navigationBar.topItem?.title = ""
     }
     private func initView(){
+        
+        view.backgroundColor = .white
         self.view.addSubview(loginLabel)
         self.view.addSubview(inputId)
         self.view.addSubview(inputPw)
@@ -132,15 +137,13 @@ class LoginVC: UIViewController, UITextFieldDelegate{
     }
     
     @objc func changeTabBarVC(_ sender: UIButton){
-//        let tabBarController = TabBarController()
-//        addChild(tabBarController)
-//        view.addSubview(tabBarController.view)
-//        tabBarController.didMove(toParent: self)
-        guard let nextVC = self.storyboard?.instantiateViewController(identifier: "TabBarController") else { return }
 
+        //guard let nextVC = self.storyboard?.instantiateViewController(identifier: "TabBarController") else { return }
+        let nextVC = TabBarController()
+        nextVC.modalPresentationStyle = .fullScreen
         let url = URL(string: "http://www.fitapet.co.kr:8080/api/v1/members/login")!
         var request = URLRequest(url: url)
-        
+
         //post body부분
         let loginData = ["uid": "jayang", "password": "dkssudgktpdy"] as Dictionary
         let jsonData = try! JSONSerialization.data(withJSONObject: loginData, options: [])
@@ -149,58 +152,27 @@ class LoginVC: UIViewController, UITextFieldDelegate{
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpBody = jsonData
       
-        AF.request(request)
-            .response { response in
-                switch response.result {
-                case .success(let res):
-                    if let httpURLResponse = response.response {
-                    // 응답 객체의 헤더 값을 출력
-                    let headers = httpURLResponse.allHeaderFields
-                    if let setCookieHeader = headers["Set-Cookie"] as? String {
-                        // Set-Cookie 헤더의 값을 가져와 출력
-                        print("Set-Cookie Header Value: \(setCookieHeader)")
-                        }
-                    }
-                    
-                    let object = try?JSONSerialization.jsonObject(with: res!, options: []) as? NSDictionary
-                    guard let jsonObject = object else {return}
-                    print("respose jsonData: \(jsonObject)")
-                    
-                    break
-                case .failure(let err):
-                    print(err)
-                    break
-                }
-            }
-
         
-
-//        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
-//            if let e = error {
-//                print("\(e.localizedDescription)")
-//                return
-//            }
-//
-//            //응답처리
-//            DispatchQueue.main.async {
-//
-//                do {
-//                    let object = try JSONSerialization.jsonObject(with: data!, options: []) as? NSDictionary
+//        AlamofireManager.shared.login("jayang", "dkssudgktpdy"){
+//            result in
+//            switch result {
+//            case .success(let data):
+//                // Handle success
+//                if let responseData = data {
+//                    // Process the data
+//                    let object = try?JSONSerialization.jsonObject(with: responseData, options: []) as? NSDictionary
 //                    guard let jsonObject = object else {return}
-//
 //                    print("respose jsonData: \(jsonObject)")
-//                    print("--------------------------------------------------------------------------")
-//                    print("response Headers: \(response)")
-//
-//                }catch let e {
-//                    print("\(e.localizedDescription)")
+//                   // print("Received data: \(responseData)")
 //                }
+//            case .failure(let error):
+//                // Handle failure
+//                print("Error: \(error)")
 //            }
-//
 //        }
-//        task.resume()
         
-        self.navigationController?.pushViewController(nextVC, animated: false)
+        // 모달로 다음 뷰 컨트롤러를 표시
+        self.present(nextVC, animated: false, completion: nil)
     }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
@@ -209,6 +181,7 @@ class LoginVC: UIViewController, UITextFieldDelegate{
             //inputPw에 text 값이 있어야만 inputPwText에 입력할 수 있다.
             if let inputPwText = inputId.text, !inputPwText.isEmpty {
                 let updatedText = (inputPw.text! as NSString).replacingCharacters(in: range, with: string)
+                password = updatedText
                 
                 if updatedText.isEmpty{
                     inputPw.layer.borderColor = UIColor(named: "Gray2")?.cgColor
@@ -223,7 +196,7 @@ class LoginVC: UIViewController, UITextFieldDelegate{
             
         } else{
             let updatedText = (inputId.text! as NSString).replacingCharacters(in: range, with: string)
-            
+            uid = updatedText
             if updatedText.isEmpty {
                 inputId.layer.borderColor = UIColor(named: "Gray2")?.cgColor
                 

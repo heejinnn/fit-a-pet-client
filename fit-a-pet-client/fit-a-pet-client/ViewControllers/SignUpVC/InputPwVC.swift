@@ -1,9 +1,4 @@
-//
-//  InputPwVC.swift
-//  fit-a-pet-client
-//
-//  Created by 최희진 on 2023/09/06.
-//
+
 
 import UIKit
 import SnapKit
@@ -26,6 +21,9 @@ class InputPwVC : UIViewController {
     
     }
     private func initView(){
+        
+        view.backgroundColor = .white
+        
         self.view.addSubview(nextNickBtn)
         self.view.addSubview(inputPw)
         self.view.addSubview(inputPwCheck)
@@ -122,7 +120,7 @@ class InputPwVC : UIViewController {
                 RegistrationManager.shared.addInput(pw: pw)
         }
         
-        guard let nextVC = self.storyboard?.instantiateViewController(identifier: "InputNickVC") else { return }
+        let nextVC = InputNickVC()
         self.navigationController?.pushViewController(nextVC, animated: false)
         // progressBar.setProgress(1.0, animated: true)
     }

@@ -17,7 +17,7 @@ class AlamofireManager{
     //MARK: - Alamofire methods
     func sendSms(_ phone: Int, completion: @escaping(Result<Data?, Error>) -> Void) {
         
-        print("MyAlamofireManager - getSms() called userInput : \(phone) ")
+        print("MyAlamofireManager - sendSms() called userInput : \(phone) ")
             
         self
             .session //세션 설정
@@ -36,7 +36,7 @@ class AlamofireManager{
     
     func checkSms(_ phone: Int, _ code: Int, completion: @escaping(Result<Data?, Error>) -> Void) {
         
-        print("MyAlamofireManager - getSms() called userInput : \(phone) ,, \(code) ")
+        print("MyAlamofireManager - checkSms() called userInput : \(phone) ,, \(code) ")
             
         self
             .session //세션 설정
@@ -51,5 +51,23 @@ class AlamofireManager{
                }
            }
         
+    }
+    
+    func login(_ uid: String, _ password: String, completion: @escaping(Result<Data?, Error>) -> Void){
+        print("MyAlamofireManager - login() called userInput : \(uid) ,, \(password) ")
+        
+        
+        self
+            .session
+            .request(MySearchRouter.login(uid: uid, password: password))
+            .response{ response in
+                switch response.result{
+                case .success(let data):
+                    completion(.success(data))
+                case .failure(let error):
+                    completion(.failure(error))
+                }
+                
+            }
     }
 }
